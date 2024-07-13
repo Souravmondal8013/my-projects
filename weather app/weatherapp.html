@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="Description" content="Enter your description here" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <title>Weather forecast</title>
+</head>
+
+<body>
+    <div class="container" style="background-color: bisque; max-width: 600px">
+        <h3>Current Temparature</h3>
+        <div class="row">
+            <img src="https://ssl.gstatic.com/onebox/weather/64/fog.png" alt="" style="width: 100px; height: 100px" />
+            <div class="col-4">
+                <h1 class="temp"></h1>
+            </div>
+            <div class="col-4">
+                <p>Weather: <span class="we"></span></p>
+                <p>Humidity: <span class="hu"></span></p>
+                <p>Wind: <span class="wi"></span></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-5">
+              <h5> Day before yesterdat</h5>  <br /><span class="dby"></span>
+                <p class="a"></p>
+            </div>
+            <div class="col-3"> <h5>Yester Day</h5><br /><span class="yd"></span>
+                <p class="b"></p>
+            </div>
+            <div class="col-3"> <h5>Tommorow</h5><br /><span class="t"></span>
+                <p class="c"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        fetch(
+            "https://api.openweathermap.org/data/2.5/weather?q=kolkata&appid=d4468e33c2cbf9f876ff47f38eaca6a7&units=metric"
+        )
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data);
+                const temp = data.main.temp;
+                const weather = data.weather[0];
+                const main = weather.main;
+                document.querySelector(".temp").innerHTML = `${temp}°C`;
+                document.querySelector(".we").innerHTML = main;
+                document.querySelector(".hu").innerHTML = `${data.main.humidity}%` ;
+                document.querySelector(".wi").innerHTML =` ${ data.wind.speed}km/hr` ;
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        fetch('https://api.openweathermap.org/data/2.5/forecast?lat=44.34&lon=10.99&appid=d4468e33c2cbf9f876ff47f38eaca6a7&units=metric')
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data);
+                const list = data.list[0]
+                const temp1 = list.main.temp
+                document.querySelector(".dby").innerHTML = `${temp1}°C`
+                const weather1 = data.list[0].weather[0].description
+                document.querySelector(".a").innerHTML = weather1
+                console.log(weather1)
+
+
+                const list1 = data.list[1]
+                const temp2 = list1.main.temp
+                document.querySelector(".yd").innerHTML = `${temp2}°C`
+                const weather2 = data.list[1].weather[0].description
+                document.querySelector(".b").innerHTML = weather2
+
+
+                const temp3 = data.list[2].main.temp
+                console.log(temp3)
+                document.querySelector(".t").innerHTML = `${temp3}°C`
+                const weather3 = data.list[2].weather[0].description
+                document.querySelector(".c").innerHTML = weather3
+            });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/js/bootstrap.min.js"></script>
+</body>
+
+</html>
